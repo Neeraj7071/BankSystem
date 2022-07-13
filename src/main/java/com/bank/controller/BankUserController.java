@@ -2,6 +2,8 @@ package com.bank.controller;
 
 import java.util.List;
 
+import javax.security.auth.login.AccountException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bank.DTO.BankUserDTO;
 import com.bank.entity.BankUser;
 import com.bank.entity.Transaction;
+import com.bank.globalExceptionHandler.AccountNotFound;
 import com.bank.service.BankUserService;
 import com.bank.service.BankUserServiceImp;
 import com.bank.service.TransactionServiceImp;
@@ -29,11 +32,11 @@ public class BankUserController {
 	}
 	
 	@GetMapping("/creditAmmount")
-	public Transaction creditAmmount(@RequestParam("accountNo") String accNo,@RequestParam("Money")int money) {
+	public Transaction creditAmmount(@RequestParam("accountNo") String accNo,@RequestParam("Money")int money) throws AccountException {
 		return bImp.creaditAmmount(accNo,money );
 	}
 	@GetMapping("/debitAmmount")
-	public Transaction debitAmmount(@RequestParam("accountNo") String accNo,@RequestParam("Money")int money) {
+	public Transaction debitAmmount(@RequestParam("accountNo") String accNo,@RequestParam("Money")int money) throws AccountException {
 		return bImp.debitAmmount(accNo,money);
 	}
 	

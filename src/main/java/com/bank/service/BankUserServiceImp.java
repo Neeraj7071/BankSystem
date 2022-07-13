@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
 
+import javax.security.auth.login.AccountException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,11 +61,11 @@ public class BankUserServiceImp implements BankUserService {
 	
 
 	@Override
-	public Transaction creaditAmmount(String accNo, int money) {
+	public Transaction creaditAmmount(String accNo, int money) throws AccountException {
 		// TODO Auto-generated method stub
 		Optional<BankUser> b1=bDao.findById(accNo);
 		if(b1.isEmpty())
-			throw new AccountNotFound("No account available");
+			throw new AccountException("No account available");
 		BankUser bUser=b1.get();
 		bUser.setBalance(bUser.getBalance()+money);
 		bDao.save(bUser);
@@ -72,14 +74,14 @@ public class BankUserServiceImp implements BankUserService {
 	}
 
 	@Override
-	public Transaction debitAmmount(String accNo, int money) {
+	public Transaction debitAmmount(String accNo, int money)throws AccountException {
 		// TODO Auto-generated method stub
 		Optional<BankUser> b1=bDao.findById(accNo);
 		if(b1.isEmpty())
-			throw new AccountNotFound("No account available");
+			throw new AccountException("No account available");
 		BankUser bUser=b1.get();
 		if(bUser.getBalance()<money)
-			throw new AccountNotFound("Not inuf ammount in your account");
+			throw new AccountException("Not insufficient ammount in your account");
 		bUser.setBalance(bUser.getBalance()-money);
 		bDao.save(bUser);
 		Transaction t1=new Transaction("debit", money, bUser);
